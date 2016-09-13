@@ -1,0 +1,288 @@
+<html>
+
+<head>
+<!-- Latest compiled and minified CSS -->
+<link rel="stylesheet" href="https://maxcdn.bootstrapcdn.com/bootstrap/3.3.7/css/bootstrap.min.css" integrity="sha384-BVYiiSIFeK1dGmJRAkycuHAHRg32OmUcww7on3RYdg4Va+PmSTsz/K68vbdEjh4u" crossorigin="anonymous">
+
+<!-- Optional theme -->
+<link rel="stylesheet" href="https://maxcdn.bootstrapcdn.com/bootstrap/3.3.7/css/bootstrap-theme.min.css" integrity="sha384-rHyoN1iRsVXV4nD0JutlnGaslCJuC7uwjduW9SVrLvRYooPp2bWYgmgJQIXwl/Sp" crossorigin="anonymous">
+
+<!-- Latest compiled and minified JavaScript -->
+<script src="https://maxcdn.bootstrapcdn.com/bootstrap/3.3.7/js/bootstrap.min.js" integrity="sha384-Tc5IQib027qvyjSMfHjOMaLkfuWVxZxUPnCJA7l2mCWNIpG9mGCD8wGNIcPD7Txa" crossorigin="anonymous"></script>
+
+<style>
+body {
+	background-color:#333;
+}
+
+.hb {
+  background-image:url('http://www.ashesofphoenix.com/forum/uploads/monthly_2016_04/1e2378a2c82d2032674ee1f0a860a2cd1e3b902b.png.d158ccedd098a99503f8ba2c4bae2f96.png');
+  background-size: 228px;
+  position: relative;
+  top: 228px;
+  height: 230px;
+  opacity: 0.25;
+}
+
+.herounit {
+  position: relative;
+  padding-top:10px;
+  height:228px;
+
+  color:#fff;
+  opacity: 1.0;
+}
+
+body {position: relative; top: -150px; color: #ddd;}
+pre {color: #000;}
+
+body a:link, a:visited {color: #aaf}
+body a:active, a:hover {color: #ccf}
+
+a.firelink:link, a.firelink:visited {color: #f90}
+a.firelink:active, a.firelink:hover {color: #f90}
+
+.container .well a:link, a:visited {color: #00f}
+.container .well a:active, a:hover {color: #00f}
+
+.well pre {color: #fff; background-color: #000;}
+.well {color: #000; background-color: #000;}
+.well h2 {color: #000}
+.well h3 {position: relative; top: -15px; color: #000;}
+
+.highlighted { color:#0f0; background-color:#000;}
+.redhighlight { color:#f00; background-color:#000;}
+
+</style>
+
+</head>
+
+<div class="container">
+	<div class="hb">&nbsp;</div>
+	<div class="herounit">
+		<h1>Goodbye <a class="firelink" target=_blank href="http://martinfowler.com/bliki/SnowflakeServer.html">Snowflake Servers</a>, Hello <a class="firelink" target=_blank href="http://martinfowler.com/bliki/PhoenixServer.html">Phoenix Servers</a></h1>
+		<h3>(or, How to create an Ubuntu Linux server in the Microsoft Cloud using the Azure CLI, and have it host this very same webpage)</h3>
+		<h4>Christopher Morley | September 13, 2016 15:42 EST</h4>
+	</div>
+</div>
+
+<div style="clear: both;"></div>
+
+<body>
+
+<div class="container">
+
+<div class="well well-lg">
+<h3>Activate your Azure benefits that come with your Visual Studio Enterprise Subscription</h3>
+1. You get $150 in credit per month, which is more than enough to mess around with Azure, especially if you are careful to stop or delete any running VMs before you go home at night.
+</div>
+
+<div class="well well-lg">
+<h3>Setup the Azure CLI initially using the Windows Command Prompt (I assume you already have node.js and npm installed)</h3>
+<pre>
+C:\Users\cmorley><span class="highlighted">npm --version</span>
+2.7.4
+
+C:\Users\cmorley><span class="highlighted">node --version</span>
+v0.12.2
+
+C:\Users\cmorley><span class="highlighted">npm install azure-cli -g</span>
+<span class="redhighlight">(output omitted. just ignore those errors for now, we have a crappy old version of node here)</span>
+
+C:\Users\cmorley><span class="highlighted">azure --version</span>
+0.10.4 (node: 0.12.2)
+
+C:\Users\cmorley><span class="highlighted">azure help</span>
+<span class="redhighlight">(output omitted, to see what you can do, run this command yourself as there are a lot of options and this output is a little lengthy)</span>
+
+C:\Users\cmorley><span class="highlighted">azure login</span>
+(follow instructions, enter code online, and then you will get a temporary local session, not sure what the timeout is)
+</pre>
+</div>
+
+
+<div class="well well-lg">
+<h3>Break-in the Azure Subscription</h3>
+1. I'm not sure why, but your Azure subscription likes to get "warmed up" or "broken in" for the first time, otherwise it complains at you from the CLI.<br>
+2. Login to portal.azure.com and create a "storage account" manually, a "virtual network" and a "virtual machine" manually, and then delete them. You just have to find the links and fill out some forms.<br>
+3. FYI, the errors are like "your subscription is not registered for Microsoft.Compute"  (... Network, ... Storage)
+4. Whatever, it's easy enough to do some stuff manually to get rid of these errors.  There is probably some automatic way too.
+</div>
+
+
+
+<div class="well well-lg">
+<h3>Then, from Windows Command Prompt:</h3>
+<pre>
+C:\Users\cmorley><span class="highlighted">azure vm quick-create xpo3 vm123 eastus Linux canonical:ubuntuserver:16.04.0-LTS:16.04.201609071 azureuser Hello123!</span>
+info:    Executing command vm quick-create
++ Listing virtual machine sizes available in the location "eastus"
++ Looking up the VM "vm123"
+info:    Using the VM Size "Standard_DS1"
+info:    The [OS, Data] Disk or image configuration requires storage account
++ Looking up the storage account stofwp050t53eah
+info:    Could not find the storage account "stofwp050t53eah", trying to create new one
++ Creating storage account "stofwp050t53eah" in "eastus"
++ Looking up the storage account stofwp050t53eah
++ Looking up the NIC "vm123-eastu-r41zrv1usefd-nic"
+info:    An nic with given name "vm123-eastu-r41zrv1usefd-nic" not found, creating a new one
++ Looking up the virtual network "vm123-eastu-r41zrv1usefd-vnet"
+info:    Preparing to create new virtual network and subnet
++ Creating a new virtual network "vm123-eastu-r41zrv1usefd-vnet" [address prefix: "10.0.0.0/16"] with subnet "vm123-eastu-r41zrv1usefd-snet" [address prefix: "10.0.1.0/24"]
++ Looking up the virtual network "vm123-eastu-r41zrv1usefd-vnet"
++ Looking up the subnet "vm123-eastu-r41zrv1usefd-snet" under the virtual network "vm123-eastu-r41zrv1usefd-vnet"
+info:    Found public ip parameters, trying to setup PublicIP profile
++ Looking up the public ip "vm123-eastu-r41zrv1usefd-pip"
+info:    PublicIP with given name "vm123-eastu-r41zrv1usefd-pip" not found, creating a new one
++ Creating public ip "vm123-eastu-r41zrv1usefd-pip"
++ Looking up the public ip "vm123-eastu-r41zrv1usefd-pip"
++ Creating NIC "vm123-eastu-r41zrv1usefd-nic"
++ Looking up the NIC "vm123-eastu-r41zrv1usefd-nic"
++ Looking up the storage account clisto2063624508vm123
++ Creating VM "vm123"
++ Looking up the VM "vm123"
++ Looking up the NIC "vm123-eastu-r41zrv1usefd-nic"
++ Looking up the public ip "vm123-eastu-r41zrv1usefd-pip"
+data:    Id                              :/subscriptions/04e557a2-e6e1-4683-bd11-40eb7c1099d6/resourceGroups/xpo3/providers/Microsoft.Compute/virtualMachines/vm123
+data:    ProvisioningState               :Succeeded
+data:    Name                            :vm123
+data:    Location                        :eastus
+data:    Type                            :Microsoft.Compute/virtualMachines
+data:
+data:    Hardware Profile:
+data:      Size                          :Standard_DS1
+data:
+data:    Storage Profile:
+data:      Image reference:
+data:        Publisher                   :canonical
+data:        Offer                       :ubuntuserver
+data:        Sku                         :16.04.0-LTS
+data:        Version                     :16.04.201609071
+data:
+data:      OS Disk:
+data:        OSType                      :Linux
+data:        Name                        :clic21e352118a4e1c0-os-1473793305570
+data:        Caching                     :ReadWrite
+data:        CreateOption                :FromImage
+data:        Vhd:
+data:          Uri                       :https://stofwp050t53eah.blob.core.windows.net/vhds/clic21e352118a4e1c0-os-1473793305570.vhd
+data:
+data:    OS Profile:
+data:      Computer Name                 :vm123
+data:      User Name                     :azureuser
+data:      Linux Configuration:
+data:        Disable Password Auth       :false
+data:
+data:    Network Profile:
+data:      Network Interfaces:
+data:        Network Interface #1:
+data:          Primary                   :true
+data:          MAC Address               :00-0D-3A-13-F2-35
+data:          Provisioning State        :Succeeded
+data:          Name                      :vm123-eastu-r41zrv1usefd-nic
+data:          Location                  :eastus
+data:            Public IP address       :40.76.17.102
+data:            FQDN                    :vm123-eastu-r41zrv1usefd-pip.eastus.cloudapp.azure.com
+data:
+data:    Diagnostics Profile:
+data:      BootDiagnostics Enabled       :true
+data:      BootDiagnostics StorageUri    :https://clisto2063624508vm123.blob.core.windows.net/
+data:
+data:      Diagnostics Instance View:
+info:    vm quick-create command OK
+</pre>
+</div>
+
+
+
+<div class="well well-lg">
+<h3>And then, from any plain old Linux terminal...</h3>
+<pre>
+cmorley@cmorley-VirtualBox:~$ <span class="highlighted">ssh azureuser@40.76.17.102</span>
+The authenticity of host '40.76.17.102 (40.76.17.102)' can't be established.
+ECDSA key fingerprint is SHA256:8B5RyDx7r5I3FrXaNYQvku29pedIx3d9f9pC7Lu9FU0.
+Are you sure you want to continue connecting (yes/no)? <span class="highlighted">yes</span>
+Warning: Permanently added '40.76.17.102' (ECDSA) to the list of known hosts.
+azureuser@40.76.17.102's password: <span class="highlighted">[typed in the password Hello123!]</span>
+Welcome to Ubuntu 16.04.1 LTS (GNU/Linux 4.4.0-36-generic x86_64)
+
+ * Documentation:  https://help.ubuntu.com
+ * Management:     https://landscape.canonical.com
+ * Support:        https://ubuntu.com/advantage
+
+  Get cloud support with Ubuntu Advantage Cloud Guest:
+    http://www.ubuntu.com/business/services/cloud
+
+0 packages can be updated.
+0 updates are security updates.
+
+
+Last login: Tue Sep 13 19:08:21 2016 from 199.168.151.119
+To run a command as administrator (user "root"), use "sudo <command>".
+See "man sudo_root" for details.
+
+azureuser@vm123:~$ <span class="highlighted">ls /</span>
+bin   etc         lib         media  proc  sbin  sys  var
+boot  home        lib64       mnt    root  snap  tmp  vmlinuz
+dev   initrd.img  lost+found  opt    run   srv   usr
+azureuser@vm123:~$ <span class="highlighted">uname -a</span>
+Linux vm123 4.4.0-36-generic #55-Ubuntu SMP Thu Aug 11 18:01:55 UTC 2016 x86_64 x86_64 x86_64 GNU/Linux
+azureuser@vm123:~$ <span class="highlighted">lsb_release -a</span>
+No LSB modules are available.
+Distributor ID:	Ubuntu
+Description:	Ubuntu 16.04.1 LTS
+Release:	16.04
+Codename:	xenial
+azureuser@vm123:~$ <span class="highlighted">exit</span>
+logout
+Connection to 40.76.17.102 closed.
+</pre>
+</div>
+
+<div class="well well-lg">
+<h3>Get Bold</h3>
+azureuser@vm123:~$ <span class="highlighted">sudo apt-get install -y nodejs npm</span>
+azureuser@vm123:~$ <span class="highlighted">git clone https://github.com/phoenix-server-farm/azure-cli-ubuntu.git</span>
+<span class="redhighlighted">output omitted</span>
+</div>
+
+<div class="well well-lg">
+<h3>Back in the Windows command prompt, burn it down to the ground! (<a href="https://www.youtube.com/watch?v=u06DpcFXc4U">Burnin' Down the House</a>)</h3>
+<pre>
+C:\Users\cmorley><span class="highlighted">azure vm delete xpo3 vm123</span>
+info:    Executing command vm delete
++ Looking up the VM "vm123"
+Delete the virtual machine "vm123"? [y/n]  y
++ Deleting the virtual machine "vm123"
+info:    vm delete command OK
+</pre>
+</div>
+
+<div class="well well-lg">
+<h3>And then, back in the Linux terminal, prove to yourself it's no longer existing (but put in a timeout so we don't have to wait too long for the timeout):</h3>
+<pre>
+cmorley@cmorley-VirtualBox:~$ <span class="highlighted">ssh azureuser@40.76.17.102 -o ConnectTimeout=5</span>
+ssh: connect to host 40.76.17.102 port 22: Connection timed out
+</pre>
+</div>
+
+<div class="well well-lg">
+<h3>Further Reading</h3>
+<a target=_blank href="https://www.thoughtworks.com/insights/blog/moving-to-phoenix-server-pattern-introduction">https://www.thoughtworks.com/insights/blog/moving-to-phoenix-server-pattern-introduction</a>
+<br>
+<a target=_blank href="https://www.thoughtworks.com/insights/blog/moving-to-phoenix-server-pattern-things-to-consider">https://www.thoughtworks.com/insights/blog/moving-to-phoenix-server-pattern-things-to-consider</a>
+<br>
+<a target=_blank href="https://www.thoughtworks.com/insights/blog/moving-using-phoenix-pattern-part-3-evolving-recovery-strategy">https://www.thoughtworks.com/insights/blog/moving-using-phoenix-pattern-part-3-evolving-recovery-strategy</a>
+<br>
+</div>
+
+&nbsp;
+&copy; 2016
+
+</div><!-- container -->
+
+&nbsp;
+
+</body>
+
+</html>
